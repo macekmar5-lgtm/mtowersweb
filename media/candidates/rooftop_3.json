@@ -1,0 +1,12 @@
+{
+ "view": "rooftop",
+ "seed": 1730227804,
+ "model": "gemini-3-pro-image",
+ "prompt": "Turn Image 1 into a photorealistic photograph. Image 1 is an untextured 3D render of the real site and it fixes the exact composition: keep the same camera position, height, angle, lens and framing, the same horizon height, and keep every building, tree line, road, beach and landmark at the same position, size and outline. Do not move the camera. Do not move, add or remove buildings, do not change the number of floors, and do not add any landmark that is not in Image 1. Only replace the flat 3D surfaces with real materials, light and detail.\n\nLayout of Image 1 to keep: standing on the timber roof deck about 75 m above the ground, looking out over the bay. The sea horizon is about 33% from the top. The deck and the long pool fill the bottom right; the glass balustrade with its dark handrail crosses the frame; the beach, promenade and road run from the bottom-left corner toward the chimney near the left edge; open sea fills the centre and right.\n\nThis is the roof terrace of one of the Málaga Towers by Estudio Lamela; the camera stands on it. No other tall tower is in view: do not add any building where Image 1 shows sky or sea. Timber deck of warm teak-coloured boards, a long rectangular infinity pool with clear turquoise water and a dark mosaic edge, frameless clear glass balustrade panels with a slim dark metal handrail, the white edge of the roof slab just below the balustrade.\n\nVisible, exactly where Image 1 shows it: the timber deck and the long infinity pool in the foreground and a frameless glass balustrade with a dark metal handrail; far below, the promenade, road, warehouses and beach running along the coast to the tall pale-brick Los Guindos chimney; on the horizon the bay of Málaga, the port cranes and the coastal mountains; open calm sea.\n\nGolden hour a few minutes before sunset: a low warm sun from the west-south-west lights the sea-facing facades and the white plates a warm golden apricot, with a crisp dark shadow under every plate; faces turned away from the sun are soft cool blue; clear pale-blue sky warming to peach near the horizon, soft haze over the sea. Photoreal architectural photograph, natural colour, crisp detail, no people in focus, no text or logos, 16:9.",
+ "images": [
+  [
+   "camera frame (3D layout)",
+   "exports/still-rooftop-sunset.png"
+  ]
+ ]
+}

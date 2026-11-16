@@ -204,7 +204,7 @@ import { Sky } from 'three/addons/objects/Sky.js';
    dark glass skin · grey louvre screens · rooftop infinity pool + timber plant room.
    ===================================================================== */
 const CONFIG = {
-  floors: 21, floorH: 3.3, groundH: 5.2, slabT: 1.1,
+  floors: 21, floorH: 3.3, groundH: 5.2, slabT: 1.3,   // thick white plate edge ≈ 40% of the floor in the photos
   W: 32, D: 24,                 // glass skin footprint (m); plates cantilever up to 4 m beyond (sea face ≈ 40 m, see refs/video/v3_4k_front_from_sea_*)
   coreW: 7, coreD: 9,
   // Straight row parallel to the coast, 72 m apart (measured on v3_4k_front_from_sea_golden_hour).
@@ -218,7 +218,7 @@ const CONFIG = {
   seed: 20261115,
   // Drop your Higgsfield renders in here. Missing entries fall back to the live 3D.
   media: {
-    stills: { front:null, side:null, back:null, rooftop:null, aerial:null },      // e.g. 'media/front.jpg'
+    stills: { front:'media/front.jpg', side:'media/side.jpg', back:'media/back.jpg', rooftop:'media/rooftop.jpg', aerial:'media/aerial.jpg' },   // gen_stills.py finals (Nano Banana Pro, 16 Nov 2026)
     clips:  { /* 'front>side':'media/front-side.mp4', 'side>front':'media/side-front.mp4', … */ },
   },
 };
@@ -240,7 +240,7 @@ const FH=CONFIG.floorH, T=CONFIG.slabT, HW=CONFIG.W/2, HD=CONFIG.D/2;
 const ROOF_Y = CONFIG.groundH + CONFIG.floors*FH;
 
 /* ---------------- plates: the signature shifting slabs ---------------- */
-const DEPTHS=[1.1,2.0,3.0,4.0];
+const DEPTHS=[1.3,1.9,2.5,3.1];   // real outline steps only ~1–2 m floor to floor (v3_4k_front_from_sea_golden_hour)
 const BAND=2.6;          // floors 1–2: uniform white overhang / band (refs/user/sv_01_tower_base_street.png)
 function makePlates(rand, level){
   const pick=()=>DEPTHS[(rand()*DEPTHS.length)|0];
@@ -249,7 +249,7 @@ function makePlates(rand, level){
     const L = (k==='S'||k==='N') ? CONFIG.W : CONFIG.D;
     const split = L*(0.36+rand()*0.28);
     let d1=pick(), d2=pick();
-    if(Math.abs(d1-d2)<0.9) d2 = d1>2.4 ? 1.1 : 4.0;
+    if(Math.abs(d1-d2)<0.9) d2 = d1>2.2 ? 1.3 : 3.1;
     if(level%2) [d1,d2]=[d2,d1];
     if(level<=2) d1=d2=BAND;                          // base: continuous band, the stagger starts at floor 3
     seg[k]=[{a:-L/2,b:-L/2+split,d:d1},{a:-L/2+split,b:L/2,d:d2}];

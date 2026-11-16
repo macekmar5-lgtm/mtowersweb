@@ -7,7 +7,7 @@ refs/
 # review pages that embed the reference photos next to the 3D exports
 exports/review/
 # heavy, regenerable AI candidates (contact sheets, log.csv and the per-candidate .json are kept)
-media/candidates/*.png
+media/candidates/**/*.png
 node_modules/
 __pycache__/
 *.pyc

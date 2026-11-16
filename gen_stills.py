@@ -97,7 +97,8 @@ BUILDING = ("Málaga Towers by Estudio Lamela: three identical residential tower
             "ground floor under a deep white overhang, then a wide continuous white band with a row of straight vertical "
             "white posts. Flat roof with a dark graphite plant room.")
 VISIBLE = {
-    "front": ("Visible, exactly where Image 1 shows it: mid-rise white apartment blocks between and behind the towers; the "
+    "front": ("Visible, exactly where Image 1 shows it: in the gaps between the towers, set back behind them, modern 7–8 "
+              "storey apartment blocks with dark glazing and white horizontal balcony bands; the "
               "city and low mountains far behind; palms and trees along the promenade; a white beach bar with straw "
               "umbrellas on the sand in front of the gap between the middle and the right tower; a wide golden beach "
               "with no palm trees on the open sand; calm sea in the foreground."),
@@ -105,7 +106,8 @@ VISIBLE = {
              "trees and tall white lamp posts; the road with trees on the left; the golden beach on the right; the tall "
              "pale-brick Los Guindos chimney small in the distance just right of centre; low mountains on the horizon."),
     "back": ("Visible, exactly where Image 1 shows it: gardens with trees and low white apartment blocks in the foreground; "
-             "two mid-rise white blocks just behind the towers; white stepped pergolas and podium roofs with pools between "
+             "two modern 7–8 storey blocks with dark glazing and white balcony bands just behind the towers; white stepped "
+             "pergolas and podium roofs with pools between "
              "the towers; large warehouse roofs on the left; the inland road and an empty sandy lot on the right; beyond "
              "the towers the coast road, the promenade, the golden beach, a stone breakwater on the right and the open sea."),
     "rooftop": ("Visible, exactly where Image 1 shows it: the timber deck and the long infinity pool in the foreground and "
@@ -117,11 +119,27 @@ VISIBLE = {
                "beach bar with straw umbrellas; the roundabout and an inland road with an empty sandy lot on the left; "
                "warehouses with blue-grey roofs on the right; the dense city and the mountains behind."),
 }
-LIGHT = ("A few minutes before sunset, low warm sun from the west raking across the west-facing faces, white plates "
-         "glowing apricot, shaded faces cool blue, soft haze over the sea. Photoreal architectural photograph, natural "
-         "colour, crisp detail, no people in focus, no text or logos, 16:9.")
+# v3: the real golden-hour photo (v3_4k_front_from_sea_golden_hour) has the sea-facing facades lit warm gold; "raking
+# across the west-facing faces" left them in cool shade in the front tests.
+LIGHT = ("Golden hour a few minutes before sunset: a low warm sun from the west-south-west lights the sea-facing "
+         "facades and the white plates a warm golden apricot, with a crisp dark shadow under every plate; faces turned "
+         "away from the sun are soft cool blue; clear pale-blue sky warming to peach near the horizon, soft haze over "
+         "the sea. Photoreal architectural photograph, natural colour, crisp detail, no people in focus, no text or "
+         "logos, 16:9.")
 CONSISTENCY = ("The last image (Image {n}) is the approved hero shot of this project: match its colour grade, light and "
                "materials exactly. Do not copy its composition.")
+# The camera is ON one tower here: the generic "three towers" text made the model insert towers into the sea.
+ROOFTOP_BUILDING = ("This is the roof terrace of one of the Málaga Towers by Estudio Lamela; the camera stands on it. No "
+                    "other tall tower is in view: do not add any building where Image 1 shows sky or sea. Timber deck of "
+                    "warm teak-coloured boards, a long rectangular infinity pool with clear turquoise water and a dark "
+                    "mosaic edge, frameless clear glass balustrade panels with a slim dark metal handrail, the white "
+                    "edge of the roof slab just below the balustrade.")
+
+# Test results 16 Nov 2026 (media/candidates/log.csv): with ANY reference photo after the camera frame, even one shot
+# from the same angle, Nano Banana Pro abandoned Image 1's composition (wrong camera, 9–16 floors). With the camera
+# frame alone, all views kept the composition. So references are opt-in (--max-refs N) and the lists above are kept
+# for experiments only.
+DEFAULT_MAX_REFS = 0
 QA = ["Composition matches Image 1 (flick between them; the towers sit in the same pixels).",
       "21 floors + base on every tower, and the base looks like sv_01 (dark recessed ground floor, white band with posts).",
       "Plates are irregular and staggered, not neat rings.",
@@ -145,14 +163,14 @@ def camera_frame(view):
     return EXPORTS / f"still-{view}-sunset.png"
 
 
-def build_request(view, max_refs=None, ref_names=None):
-    """Return (list of (label, path), prompt, warnings). max_refs / ref_names override the per-view list (experiments)."""
+def build_request(view, max_refs=DEFAULT_MAX_REFS, ref_names=None, use_hero=False):
+    """Return (list of (label, path), prompt, warnings). Default: the camera frame only (see DEFAULT_MAX_REFS)."""
     warn = []
     frame = camera_frame(view)
     if not frame.exists():
         raise SystemExit(f"Camera frame missing: {frame}. Export it from index.html?dev first.")
     hero = MEDIA / "front.jpg"
-    consistency = view != "front" and hero.exists()
+    consistency = use_hero and view != "front" and hero.exists()
     room = MAX_IMAGES - 1 - (1 if consistency else 0)
     if max_refs is not None:
         room = min(room, max_refs)
@@ -172,7 +190,7 @@ def build_request(view, max_refs=None, ref_names=None):
     last_ref = n - 1 if consistency else n
     if last_ref >= 2:
         parts.append(REFS_LINE.format(last=last_ref))
-    parts += [BUILDING, VISIBLE[view], LIGHT]
+    parts += [ROOFTOP_BUILDING if view == "rooftop" else BUILDING, VISIBLE[view], LIGHT]
     if consistency:
         parts.append(CONSISTENCY.format(n=n))
     return images, "\n\n".join(parts), warn
@@ -298,16 +316,30 @@ def save_png(data, path):
 
 
 def to_site_jpgs(src_img, view):
-    """media/<view>_4k.jpg (as generated) + media/<view>.jpg at exactly 1920×1080 (centre-crop to 16:9 if needed)."""
-    im = src_img.convert("RGB")
-    w, h = im.size
-    if abs(w / h - 16 / 9) > 0.003:
-        if w / h > 16 / 9:
-            nw = round(h * 16 / 9); im = im.crop(((w - nw) // 2, 0, (w - nw) // 2 + nw, h))
-        else:
-            nh = round(w * 9 / 16); im = im.crop((0, (h - nh) // 2, w, (h - nh) // 2 + nh))
+    """Return the image to save. The model's "16:9" is 2752×1536 (1.792). Measured on the front tests, it fits the
+    whole camera frame into that canvas (tower edges matched best with a plain resize, not a crop), so the site
+    version is a straight resize to 1920×1080 and the floor overlays line up."""
     MEDIA.mkdir(exist_ok=True)
-    return im
+    return src_img.convert("RGB")
+
+
+# ---------------------------------------------------------------- composition check
+COMPOSITION_MIN = 0.6   # good variants scored 0.73–0.96 in the Nov 2026 tests; one that ignored Image 1 scored 0.39
+
+
+def composition_score(frame_path, img):
+    """Correlation of blurred edge maps (3D frame vs generated image), 1.0 = identical layout."""
+    from PIL import ImageFilter
+    import math
+
+    def emap(im):
+        im = (Image.open(im) if not isinstance(im, Image.Image) else im).convert("L").resize((480, 270), Image.LANCZOS)
+        return im.filter(ImageFilter.FIND_EDGES).filter(ImageFilter.GaussianBlur(3)).tobytes()
+    a, b = emap(frame_path), emap(img)
+    ma, mb = sum(a) / len(a), sum(b) / len(b)
+    num = sum((x - ma) * (y - mb) for x, y in zip(a, b))
+    den = math.sqrt(sum((x - ma) ** 2 for x in a) * sum((y - mb) ** 2 for y in b)) or 1
+    return num / den
 
 
 # ---------------------------------------------------------------- contact sheet
@@ -333,7 +365,10 @@ def contact_sheet(view, files=None):
         y = pad + (i // cols) * (th + lab + pad)
         im = Image.open(p).convert("RGB").resize((tw, th), Image.LANCZOS)
         sheet.paste(im, (x, y + lab))
-        d.text((x + 4, y + 6), name, fill=(226, 195, 143), font=font)
+        if i:
+            sc = composition_score(camera_frame(view), p)
+            name += f"   composition {sc:.2f}" + ("" if sc >= COMPOSITION_MIN else "  ✗ IGNORED IMAGE 1")
+        d.text((x + 4, y + 6), name, fill=(226, 195, 143) if not i or sc >= COMPOSITION_MIN else (255, 90, 80), font=font)
     out = CAND / f"{view}_sheet.jpg"
     sheet.save(out, quality=88)
     print(f"Contact sheet: {out}")
@@ -350,7 +385,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("views", nargs="*", help="front side back rooftop aerial, or all")
     ap.add_argument("--variants", type=int, default=3)
-    ap.add_argument("--max-refs", type=int, help="send at most N reference images (0 = camera frame only)")
+    ap.add_argument("--max-refs", type=int, default=DEFAULT_MAX_REFS,
+                    help="send up to N reference photos after the camera frame (default 0: frame only, see DEFAULT_MAX_REFS)")
+    ap.add_argument("--consistency", action="store_true",
+                    help="add the approved media/front.jpg as the last image (off by default: extra images break the composition)")
     ap.add_argument("--refs", help="comma-separated reference name prefixes, overrides the per-view list")
     ap.add_argument("--max-total", type=float, help="refuse to run if the logged spend + this run would exceed this (USD)")
     ap.add_argument("--final", metavar="VIEW_N", help="re-run candidate VIEW_N at 4K -> media/<view>.jpg + <view>_4k.jpg")
@@ -401,7 +439,7 @@ def main():
         if bad:
             sys.exit(f"Unknown view(s): {bad}. Use {VIEWS} or all.")
         for v in views:
-            images, prompt, warn = build_request(v, a.max_refs, a.refs.split(",") if a.refs else None)
+            images, prompt, warn = build_request(v, a.max_refs, a.refs.split(",") if a.refs else None, a.consistency)
             for w in warn:
                 print(f"[{v}] WARNING: {w}")
             start = next_index(v)
@@ -453,6 +491,16 @@ def main():
         if j["final"]:
             im = Image.open(io.BytesIO(data))
             out_w, out_h = im.size
+            if composition_score(camera_frame(j["view"]), im) < COMPOSITION_MIN:
+                rej = CAND / f"{j['name']}_rejected.png"
+                im.convert("RGB").save(rej)
+                log_row(time=datetime.datetime.now().isoformat(timespec="seconds"), view=j["view"], file=rej.name,
+                        size=j["size"], model=model, seed=j["seed"], prompt_sha=sha, images=imgs, status="ok",
+                        cost_usd=f"{cost:.4f}", prompt_tokens=pt, output_tokens=ot, thought_tokens=tt, out_w=out_w,
+                        out_h=out_h, note="4K re-run ignored Image 1; media/ not touched")
+                print(f"   the 4K re-run ignored Image 1 (saved as {rej.name}); media/{j['view']}.jpg NOT changed. "
+                      f"Use --promote {j['name'][:-3]} instead.")
+                continue
             im = to_site_jpgs(im, j["view"])
             im.save(MEDIA / f"{j['view']}_4k.jpg", quality=93)
             im.resize((1920, 1080), Image.LANCZOS).save(MEDIA / f"{j['view']}.jpg", quality=92)
@@ -468,9 +516,13 @@ def main():
             print(f"   saved {out.relative_to(ROOT)} ({out_w}×{out_h}) in {time.time()-t0:.0f}s")
         if out_w < (1800 if j["size"] == "2K" else 3600):
             print(f"   NOTE: output is only {out_w}×{out_h}; the requested size may have been ignored.")
+        sc = composition_score(camera_frame(j["view"]), out)
+        verdict = "OK" if sc >= COMPOSITION_MIN else "LOW: the model probably ignored Image 1, reject"
+        print(f"   composition score {sc:.2f} ({verdict})")
         log_row(time=datetime.datetime.now().isoformat(timespec="seconds"), view=j["view"], file=out.name,
                 size=j["size"], model=model, seed=j["seed"], prompt_sha=sha, images=imgs, status="ok",
-                cost_usd=f"{cost:.4f}", prompt_tokens=pt, output_tokens=ot, thought_tokens=tt, out_w=out_w, out_h=out_h)
+                cost_usd=f"{cost:.4f}", prompt_tokens=pt, output_tokens=ot, thought_tokens=tt, out_w=out_w, out_h=out_h,
+                note=f"composition {sc:.2f}")
         done.setdefault(j["view"], []).append(out)
         print(f"   running total this run: ${run_cost:.2f}")
 

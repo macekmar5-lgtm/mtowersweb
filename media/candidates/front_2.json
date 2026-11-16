@@ -1,64 +1,12 @@
 {
  "view": "front",
- "seed": 50698719,
+ "seed": 73387895,
  "model": "gemini-3-pro-image",
- "prompt": "Image 1 is a 3D layout render and is the ONLY source for composition. The output must have exactly the same camera position, height, angle, lens and framing as Image 1, and every building, road, promenade, beach and landmark must keep the same position, size and outline as in Image 1. Do not copy the camera angle, viewpoint or composition of any other image. Replace the simplified 3D surfaces with photoreal materials only.\n\nImages 2–14 are real photographs and renders of the same place, used ONLY for materials, details, vegetation and the look of the surroundings.\n\nMálaga Towers by Estudio Lamela: three identical 21-storey residential towers in a straight row parallel to the coast on the Paseo Marítimo Antonio Banderas, Misericordia beach, Málaga. Every floor is ringed by thick bright-white cantilevered slab plates about one metre deep in section; their projection changes from floor to floor and from segment to segment, so each tower's outline is a jagged stack of white bands with deep shadow beneath every plate. Frameless clear glass balustrades on every plate; recessed dark grey-blue floor-to-ceiling glazing; grey horizontal-slat louvre panels in some bays. The base: a recessed dark-glass ground floor under a deep white overhang, a wide continuous white first-floor band with a row of straight vertical white posts, an entrance canopy with angled white fins and the number 92, and low white two-storey podium wings with communal pools on their roofs. Flat roof with a dark graphite plant room, a timber deck and a long infinity pool behind a glass balustrade.\n\nBehind the towers are mid-rise white residential blocks and, to the east across a side street, large low industrial warehouses with blue-grey roofs. Between the towers, white stepped pergolas and landscaped gardens. In front of the towers: a wide six-lane road with a tree-planted median; blue and red promenade lanes; a wide promenade with red paving, lawns, trees and white shade pergolas; a light seaside walkway with lamp posts; low dune vegetation with small clusters of palms only near the beach bar; then a wide golden sand beach with a white beach bar, straw umbrellas and sunbeds, no palm rows on the open sand; then the Mediterranean. To the west a roundabout, a palm-planted promenade plaza and a stone breakwater; to the east the tall pale-brick Los Guindos chimney and, further along the bay, the port with its cranes; inland the city and the Montes de Málaga mountains.\n\nSeen from just above the sea, looking straight inland across the beach, promenade and road at the three towers standing side by side.\n\nA few minutes before sunset, low warm sun from the west raking across the west-facing faces, white plates glowing apricot, shaded faces cool blue, soft haze over the sea. Photoreal architectural photograph, natural colour, crisp detail, no people in focus, no text or logos except the small number 92, 16:9.",
+ "prompt": "Turn Image 1 into a photorealistic photograph. Image 1 is an untextured 3D render of the real site and it fixes the exact composition: keep the same camera position, height, angle, lens and framing, the same horizon height, and keep every building, tree line, road, beach and landmark at the same position, size and outline. Do not move the camera. Do not move, add or remove buildings, do not change the number of floors, and do not add any landmark that is not in Image 1. Only replace the flat 3D surfaces with real materials, light and detail.\n\nLayout of Image 1 to keep: a low long-lens view from the sea. Calm sea fills the bottom 40% of the frame; a thin strip of beach crosses the whole width at about 60–64% height. The three towers stand side by side in one straight row: left tower at 21–36% of the width, middle tower at 45–59%, right tower at 66–81%, all with their roofs about 12% below the top edge and their bases hidden behind trees at about 57%.\n\nMálaga Towers by Estudio Lamela: three identical residential towers, each with exactly the number of floors shown in Image 1 (21 residential floors above the base). Every floor is ringed by thick bright-white cantilevered slab plates about one metre deep; their projection changes from floor to floor and from segment to segment, so each outline is a jagged stack of white bands with deep shadow beneath every plate, never neat identical rings. Frameless clear glass balustrades on every plate; recessed dark grey-blue floor-to-ceiling glazing; grey horizontal-slat louvre panels in some bays. The base: a recessed dark-glass ground floor under a deep white overhang, then a wide continuous white band with a row of straight vertical white posts. Flat roof with a dark graphite plant room.\n\nVisible, exactly where Image 1 shows it: mid-rise white apartment blocks between and behind the towers; the city and low mountains far behind; palms and trees along the promenade; a white beach bar with straw umbrellas on the sand in front of the gap between the middle and the right tower; a wide golden beach with no palm trees on the open sand; calm sea in the foreground.\n\nA few minutes before sunset, low warm sun from the west raking across the west-facing faces, white plates glowing apricot, shaded faces cool blue, soft haze over the sea. Photoreal architectural photograph, natural colour, crisp detail, no people in focus, no text or logos, 16:9.",
  "images": [
   [
    "camera frame (3D layout)",
    "exports/still-front-sunset.png"
-  ],
-  [
-   "v3_4k_front_from_sea_golden_hour",
-   "refs/video/v3_4k_front_from_sea_golden_hour.jpg"
-  ],
-  [
-   "v3_4k_front_from_sea_day",
-   "refs/video/v3_4k_front_from_sea_day.jpg"
-  ],
-  [
-   "v3_4k_front_from_sea_blue_hour",
-   "refs/video/v3_4k_front_from_sea_blue_hour.jpg"
-  ],
-  [
-   "v1_drone_from_sea_warehouses",
-   "refs/video/v1_drone_from_sea_warehouses.jpg"
-  ],
-  [
-   "v1_drone_from_sea_low_beach",
-   "refs/video/v1_drone_from_sea_low_beach.jpg"
-  ],
-  [
-   "v3_4k_front_from_beach_1",
-   "refs/video/v3_4k_front_from_beach_1.jpg"
-  ],
-  [
-   "13_photo_from_beach",
-   "refs/full/13_photo_from_beach_commons.jpg"
-  ],
-  [
-   "sv_01_tower_base_street",
-   "refs/user/sv_01_tower_base_street.png"
-  ],
-  [
-   "v3_4k_entrance_92_dusk",
-   "refs/video/v3_4k_entrance_92_dusk.jpg"
-  ],
-  [
-   "02_detail_white_plates",
-   "refs/full/02_detail_white_plates_lamela.jpg"
-  ],
-  [
-   "03_detail_corner_stack",
-   "refs/full/03_detail_corner_stack_lamela.jpg"
-  ],
-  [
-   "20_detail_plates_from_below",
-   "refs/full/20_detail_plates_from_below_aluman.jpg"
-  ],
-  [
-   "v1_view_promenade_beach_from_tower",
-   "refs/video/v1_view_promenade_beach_from_tower.jpg"
   ]
  ]
 }

@@ -10,3 +10,21 @@ time,view,file,size,model,seed,prompt_sha,images,status,cost_usd,prompt_tokens,o
 2026-11-16T17:10:02,aerial,aerial_1.png,2K,gemini-3-pro-image,1813045231,c35898409e,still-aerial-sunset.png,ok,0.1351,832,1454,225,2752,1536,
 2026-11-16T17:10:32,front,front_6.png,2K,gemini-3-pro-image,1142326006,e7bf951869,still-front-sunset.png,ok,0.1351,828,1498,293,2752,1536,
 2026-11-16T17:11:02,front,front_7.png,2K,gemini-3-pro-image,1592164895,e7bf951869,still-front-sunset.png,ok,0.1351,828,1518,223,2752,1536,
+2026-11-16T17:16:12,front,front_1.png,2K,gemini-3-pro-image,1992664196,e7bf951869,still-front-sunset.png,ok,0.1351,828,1448,201,2752,1536,
+2026-11-16T17:16:40,front,front_2.png,2K,gemini-3-pro-image,73387895,e7bf951869,still-front-sunset.png,ok,0.1351,828,1398,327,2752,1536,
+2026-11-16T17:17:08,rooftop,rooftop_1.png,2K,gemini-3-pro-image,960063073,b67b8beec3,still-rooftop-sunset.png,ok,0.1351,741,1354,222,2752,1536,
+2026-11-16T17:17:35,rooftop,rooftop_2.png,2K,gemini-3-pro-image,567436140,b67b8beec3,still-rooftop-sunset.png,ok,0.1351,741,1438,278,2752,1536,
+2026-11-16T17:18:06,side,side_1.png,2K,gemini-3-pro-image,1351651462,ab616361b7,still-side-sunset.png,ok,0.1351,814,1526,251,2752,1536,
+2026-11-16T17:18:34,back,back_1.png,2K,gemini-3-pro-image,882537812,9be229a9ec,still-back-sunset.png,ok,0.1351,821,1385,202,2752,1536,
+2026-11-16T17:19:05,aerial,aerial_1.png,2K,gemini-3-pro-image,746791600,c35898409e,still-aerial-sunset.png,ok,0.1351,832,1398,272,2752,1536,
+2026-11-16T17:20:32,front,front_3.png,2K,gemini-3-pro-image,1500301772,8a216ea184,still-front-sunset.png,ok,0.1351,880,1443,278,2752,1536,
+2026-11-16T17:21:08,front,front_4.png,2K,gemini-3-pro-image,2052785373,8a216ea184,still-front-sunset.png,ok,0.1351,880,1468,305,2752,1536,
+2026-11-16T17:21:36,side,side_2.png,2K,gemini-3-pro-image,1737009307,3baffa6c39,still-side-sunset.png,ok,0.1351,849,1455,313,2752,1536,
+2026-11-16T17:22:04,back,back_2.png,2K,gemini-3-pro-image,783857476,fe11f0b8dd,still-back-sunset.png,ok,0.1351,865,1431,290,2752,1536,
+2026-11-16T17:22:31,rooftop,rooftop_3.png,2K,gemini-3-pro-image,1730227804,561738b8d6,still-rooftop-sunset.png,ok,0.1351,776,1431,213,2752,1536,
+2026-11-16T17:23:02,aerial,aerial_2.png,2K,gemini-3-pro-image,319862258,abace9468b,still-aerial-sunset.png,ok,0.1351,867,1436,230,2752,1536,
+2026-11-16T17:25:06,front,front.jpg,4K,gemini-3-pro-image,1500301772,8a216ea184,still-front-sunset.png,ok,0.2411,880,2387,281,5504,3072,composition 0.90
+2026-11-16T17:25:48,side,side.jpg,4K,gemini-3-pro-image,1737009307,3baffa6c39,still-side-sunset.png,ok,0.2411,849,2429,301,5504,3072,composition 0.91
+2026-11-16T17:26:31,back,back.jpg,4K,gemini-3-pro-image,783857476,fe11f0b8dd,still-back-sunset.png,ok,0.2411,865,2571,281,5504,3072,composition 0.85
+2026-11-16T17:27:14,rooftop,rooftop.jpg,4K,gemini-3-pro-image,1730227804,561738b8d6,still-rooftop-sunset.png,ok,0.2411,776,2295,231,5504,3072,composition 0.68
+2026-11-16T17:27:53,aerial,aerial.jpg,4K,gemini-3-pro-image,319862258,abace9468b,still-aerial-sunset.png,ok,0.2411,867,2300,303,5504,3072,composition 0.88

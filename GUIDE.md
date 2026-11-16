@@ -8,7 +8,7 @@ exports/still-*-sunset.png ─► gen_stills.py (Nano Banana Pro API) ─► med
 each still ───────────────► Kling 3.0 same start+end frame ─────► media/front-loop.mp4 … (idle loops)
 ```
 
-**Cost:** stills ≈ $0.45 per view for 3 variants plus $0.24 per 4K final (≈ $3.50 for all 5 views). Video is Kling Standard, about $7 for the first month (660 credits). **Cancel before it renews.**
+**Cost:** stills ≈ $0.40 per view for 3 variants plus $0.24 per 4K final (≈ $3.20 for all 5 views; the first full set incl. all tests cost $4.49). Video is Kling Standard, about $7 for the first month (660 credits). **Cancel before it renews.**
 
 ---
 
@@ -20,18 +20,20 @@ each still ───────────────► Kling 3.0 same start
 ---
 
 ## 1. Stills: run the script (Nano Banana Pro via the Gemini API)
-The script `gen_stills.py` does everything that used to be manual in AI Studio. It sends the 3D camera frame as Image 1 (the composition lock), then up to 13 matching reference photos per view, and the prompt blocks from HANDOFF §9.3. It saves the variants, logs every request and builds a contact sheet.
+The script `gen_stills.py` does everything that used to be manual in AI Studio. It sends **only the 3D camera frame** with a prompt that tells the model to turn that frame into a photo without moving the camera. Tests showed that adding reference photos (even one taken from the same angle) makes the model ignore the frame, so references are off by default. It saves the variants, scores each one against the frame, logs every request and builds a contact sheet.
+
+**The five stills are done** (16 Nov 2026): `media/front.jpg`, `side.jpg`, `back.jpg`, `rooftop.jpg`, `aerial.jpg` (+ `_4k.jpg`), already plugged into `index.html`. Use the steps below only to redo a view, for example after changing the 3D model.
 
 **Cost:** $0.134 per 2K image, $0.24 per 4K image (input images ≈ $0.001 each). Every paid run shows its cost and asks before calling the API.
 
 1. **API key:** the script reads `GEMINI_API_KEY` (already set on Martin's PC), otherwise it asks once and saves it to `.env` (ignored by git). Never paste the key into the code.
-2. **Check first (free):** double-click **GEN-STILLS.bat** and type `front --dry-run`. It prints the 14 images it would send and the full prompt.
-3. **Front first:** run `front`. That's 3 variants at 2K (~$0.45) in `media/candidates/front_1.png …`, plus `front_sheet.jpg` showing the 3D frame next to every variant.
+2. **Check first (free):** double-click **GEN-STILLS.bat** and type `front --dry-run`. It prints the image it would send and the full prompt.
+3. **Front first:** run `front`. That's 3 variants at 2K (~$0.40) in `media/candidates/front_1.png …`, plus `front_sheet.jpg` showing the 3D frame next to every variant. Each variant gets a **composition score** (printed and on the sheet). Below 0.6 means the model ignored the frame (it happens about 1 time in 6), so reject it.
 4. **Check each variant** against the QA list below and pick the best, e.g. `front_2`.
 5. **Finalise:** `--final front_2` re-runs it at 4K (~$0.24) and writes `media/front.jpg` (1920×1080 for the site) and `media/front_4k.jpg`. If the 4K re-run comes out worse, `--promote front_2` uses the 2K candidate as `media/front.jpg` for free.
-6. **Other views:** once `media/front.jpg` exists, every other view automatically gets it as the last image ("match its colour grade, light and materials"). Run `side`, `back`, `rooftop`, `aerial` (or `all`), then finalise each one as in step 5.
+6. **Other views:** run `side`, `back`, `rooftop`, `aerial` (or `all`) with the same prompt, so the light matches, then finalise each one as in step 5. `--consistency` adds the approved front as an extra image, but that can break the composition, so test with 1 variant first.
 
-Useful options: `--variants 4`, `--yes` (skip the confirmation for runs up to $5), `--sheet front` (rebuild a contact sheet), `--list-models` (free). Every request goes into `media/candidates/log.csv` (view, seed, images, prompt hash, cost, tokens, output size).
+Useful options: `--variants 4`, `--yes` (skip the confirmation for runs up to $5), `--max-total 10` (refuse to go over a total budget), `--sheet front` (rebuild a contact sheet with every candidate), `--list-models` (free), `--max-refs N` / `--refs a,b` (experiments with reference photos). Every request goes into `media/candidates/log.csv` (view, seed, images, prompt hash, cost, tokens, output size).
 
 **Quality check before keeping a still (reject if any fail):**
 - Composition matches Image 1. Flick between the variant and the 3D frame: the towers must sit in the same pixels.
