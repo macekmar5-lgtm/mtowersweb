@@ -1,0 +1,13 @@
+# secrets: the Gemini key lives in the GEMINI_API_KEY environment variable or in .env, never in a file in the repo
+.env
+*.env
+.env.*
+# copyrighted reference photos (architect, press, marketing): private AI inputs only, never publish (HANDOFF §4)
+refs/
+# review pages that embed the reference photos next to the 3D exports
+exports/review/
+# heavy, regenerable AI candidates (contact sheets, log.csv and the per-candidate .json are kept)
+media/candidates/*.png
+node_modules/
+__pycache__/
+*.pyc
